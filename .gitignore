@@ -1,0 +1,57 @@
+# ====================
+# OS 관련
+# ====================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ====================
+# Visual Studio 관련
+# ====================
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.VC.opendb
+*.ncb
+*.opendb
+*.sdf
+*.cache
+*.pdb
+*.idb
+*.ipch/
+*.tlog
+*.log
+
+# ====================
+# 빌드 출력 파일
+# ====================
+*.exe
+*.dll
+*.lib
+*.obj
+*.o
+*.ilk
+*.tmp
+*.bak
+
+# ====================
+# CMake/Make 관련 (있을 경우)
+# ====================
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+
+# ====================
+# 기타
+# ====================
+*.aps
+*.pch
+*.res
+*.manifest
+*.class
+*.swp

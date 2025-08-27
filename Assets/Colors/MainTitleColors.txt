@@ -1,0 +1,8 @@
+  AAAAAA      AAAAA  AAAAAAAAAAAA    AAAAAA     AAAAAAA  
+AA      AA   AA           AA       AA      AA   AA     AA
+AA      AA   AA           AA       AA      AA   AA     AA
+AA      AA   AA           AA       AA      AA   AA     AA
+AAAAAAAAAA    AAAAA       AA       AAAAAAAAAA   AAAAAAA  
+AA      AA       AA       AA       AA      AA   AA     AA
+AA      AA       AA       AA       AA      AA   AA     AA
+AA      AA   AAAAAA       AA       AA      AA   AA     AA
