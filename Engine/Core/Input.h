@@ -50,6 +50,8 @@ public:
 	bool GetMouseLeft() const { return mouseState.leftDown; } //마우스 클릭되어 있는지
 	bool GetMouseLeftDown() const { return mouseState.leftPressed; } //이번 프레임에 새로눌렸는지
 	bool GetMouseLeftUp() const { return mouseState.prevLeftDown && !mouseState.leftDown; } //이번 프레임에 마우스를 뗐는지
+	bool GetMouseRight() const { return mouseState.rightDown; } //마우스 클릭되어 있는지
+
 	bool IsMouseOver(const Vector2& topLeft, const Vector2& bottomRight) const;
 
 private:

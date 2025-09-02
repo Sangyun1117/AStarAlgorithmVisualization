@@ -9,10 +9,15 @@
 #define BLOCKSIZE_WIDTH 10
 #define BLOCKSIZE_HEIGHT 5
 
-//마우스 셀렉트
+//오브젝트 셀렉트
 #define SELECT_WALL 0
 #define SELECT_RABBIT 1
 #define SELECT_CARROT 2
+
+//휴라스틱 셀렉트
+#define SELECT_EUCLID 0
+#define SELECT_MANHATTAN 1
+#define SELECT_CHEBYSHEV 2
 
 //글자 조정
 #define WORD_WIDTH 2

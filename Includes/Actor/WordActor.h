@@ -1,3 +1,4 @@
+//WordActor는 유니코드 한 글자를 이미지로 사용하는 객체
 #pragma once
 #include "Core.h"
 #include "Math/Vector2.h"

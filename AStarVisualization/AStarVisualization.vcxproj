@@ -28,6 +28,7 @@
     <ClCompile Include="Level\HomeLevel.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Math\AStar.cpp" />
+    <ClCompile Include="Math\Node.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Carrot.h" />

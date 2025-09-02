@@ -28,7 +28,7 @@ private:
 	void RestartPath();
 	void CarrotRandomRespawn();
 private:
-	AStar aStar;
+	AStar* aStar;
 	Carrot* carrot = nullptr;
 	Rabbit* rabbit = nullptr;
 	int nowMouseLevel = SELECT_CARROT;
@@ -42,16 +42,16 @@ private:
 
 
 	//ui버튼
-	bool isHoverRabbit = false;
-	bool isHoverWall = false;
-	bool isHoverCarrot = false;
-	bool isHoverStart = false;
+	//bool isHoverRabbit = false;
+	//bool isHoverWall = false;
+	//bool isHoverCarrot = false;
+	//bool isHoverStart = false;
 	Color selectedTextColor = Color::Green;
 	Color selectedBagroundColor = Color::Blue;
 	//아이템 선택 안됐을 때 색상
 	Color unselectedTextColor = Color::White;
 	Color unselectedBagroundColor = Color::Gray;
-	//버튼 위치
+	//UI 위치
 	Vector2 rabbitButtonLeftTopXY;
 	Vector2 rabbitButtonRightBottomXY;
 	Vector2 wallButtonLeftTopXY;
@@ -60,4 +60,15 @@ private:
 	Vector2 carrotButtonRightBottomXY;
 	Vector2 startButtonLeftTopXY;
 	Vector2 startButtonRightBottomXY;
+	Vector2 findTextXY;
+	int findCount = 0;
+	Vector2 findTimeTextXY;
+	float findTime = 0.0f;
+	Vector2 euclidButtonLeftTopXY;
+	Vector2 euclidButtonRightBottomXY;
+	Vector2 manhattanButtonLeftTopXY;
+	Vector2 manhattanButtonRightBottomXY;
+	Vector2 chebyshevButtonLeftTopXY;
+	Vector2 chebyshevButtonRightBottomXY;
+	int heuristicSelect = SELECT_EUCLID;
 };

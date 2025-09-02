@@ -5,9 +5,12 @@
 #include "Actor/PathBox.h"
 #include "Node.h"
 #include <Windows.h>
+#include <queue>
+#include <algorithm>
 
-AStar::AStar()
+AStar::AStar(int x, int y)
 {
+	map = std::vector<std::vector<Node*>>(y, std::vector<Node*>(x, nullptr));
 }
 
 AStar::~AStar()
@@ -20,11 +23,13 @@ AStar::~AStar()
 	}
 	openList.clear();
 
-	for (Node* node : closedList)
-	{
-		SafeDelete(node);
+	for (auto& row : map) {
+		for (Node*& node : row) {
+			SafeDelete(node);
+		}
+		row.clear();
 	}
-	closedList.clear();
+	map.clear();
 
 	while (!resultQueue.empty())
 	{
@@ -35,7 +40,7 @@ AStar::~AStar()
 
 }
 
-bool AStar::FindPath(std::vector<std::vector<WordActor*>>& grid)
+bool AStar::FindPath(std::vector<std::vector<WordActor*>>& grid, int heuristicSelect)
 {
 	// 시작 노드 / 목표 노드 저장.
 
@@ -82,27 +87,30 @@ bool AStar::FindPath(std::vector<std::vector<WordActor*>>& grid)
 
 	// 현재 노드를 닫힌 목록에 추가.
 	// 이미 있으면 추가 안하고, 없으면 추가.
-	bool isNodeInList = false;
-	for (Node* node : closedList)
-	{
-		if (*node == *currentNode)
-		{
-			isNodeInList = true;
-			break;
-		}
-	}
-
 	// 방문 했으면 아래 단계 건너뛰기.
-	if (isNodeInList)
+	if (currentNode->visited)
 	{
 		return true;
 	}
+	currentNode->visited = true;
+	map[currentNode->position.y][currentNode->position.x] = currentNode;
 
-	// 목록에 추가.
-	closedList.emplace_back(currentNode);
+	std::vector<Direction> nowDirection;
+
+	// 휴리스틱 비용 계산 함수 호출.
+	if (heuristicSelect == SELECT_EUCLID) {
+		nowDirection = euclidDirections;
+	}
+	else if (heuristicSelect == SELECT_MANHATTAN) {
+		nowDirection = manhattanDirections;
+	}
+	else {
+		nowDirection = chebyshevdirections;
+	}
+
 
 	// 이웃노드 방문.
-	for (const Direction& direction : directions)
+	for (const Direction& direction : nowDirection)
 	{
 		// 다음에 이동할 위치 설정.
 		int newX = currentNode->position.x + direction.x;
@@ -144,7 +152,16 @@ bool AStar::FindPath(std::vector<std::vector<WordActor*>>& grid)
 		Node* neighborNode = new Node(newX, newY, currentNode);
 		neighborNode->gCost = currentNode->gCost + direction.cost;
 		// 휴리스틱 비용 계산 함수 호출.
-		neighborNode->hCost = CalculateHeuristic(neighborNode, goalNode);
+		if (heuristicSelect == SELECT_EUCLID) {
+			neighborNode->hCost = CalculateEuclidHeuristic(neighborNode, goalNode);
+		}
+		else if (heuristicSelect == SELECT_MANHATTAN) {
+			neighborNode->hCost = CalculateManhattanHeuristic(neighborNode, goalNode);
+		}
+		else {
+			neighborNode->hCost = CalculateChebyshevHeuristic(neighborNode, goalNode);
+		}
+
 		neighborNode->fCost = neighborNode->gCost + neighborNode->hCost;
 
 		// 이웃 노드가 열린 리스트에 있는지 확인.
@@ -211,6 +228,7 @@ bool AStar::IsInRange(int x, int y, const std::vector<std::vector<WordActor*>>& 
 
 bool AStar::HasVisited(int x, int y, float gCost)
 {
+
 	// 열린 리스트나 닫힌 리스트에 이미 해당 노드가 있으면 방문한 것으로 판단.
 	for (int ix = 0; ix < (int)openList.size(); ++ix)
 	{
@@ -230,22 +248,11 @@ bool AStar::HasVisited(int x, int y, float gCost)
 		}
 	}
 
-	for (int ix = 0; ix < (int)closedList.size(); ++ix)
-	{
-		Node* node = closedList[ix];
-		if (node->position.x == x && node->position.y == y)
-		{
-			// 위치가 같고, 비용도 높으면 방문할 이유 없음.
-			if (node->gCost < gCost)
-			{
-				return true;
-			}
-			// 위치는 같으나 비용이 작다면, 기존 노드 제거.
-			else if (node->gCost > gCost)
-			{
-				closedList.erase(closedList.begin() + ix);
-				SafeDelete(node);
-			}
+	if (map[y][x]!=nullptr && map[y][x]->visited) {
+		if (map[y][x]->gCost <= gCost)
+			return true;
+		else {
+			SafeDelete(map[y][x]);
 		}
 	}
 
@@ -253,14 +260,31 @@ bool AStar::HasVisited(int x, int y, float gCost)
 	return false;
 }
 
-float AStar::CalculateHeuristic(Node* currentNode, Node* goalNode)
+// 유클리드 거리 (직선 거리)
+float AStar::CalculateEuclidHeuristic(Node* currentNode, Node* goalNode)
 {
 	// 단순 거리 계산으로 휴리스틱 비용으로 활용.
 	Vector2 diff = currentNode->position - goalNode->position;
 
 	// 대각선 길이 구하기. 
 	return (float)std::sqrt(diff.x * diff.x + diff.y * diff.y);
+	//return (float)(diff.x * diff.x + diff.y * diff.y);
 }
+
+// 맨해튼 거리 (상하좌우 이동 전용)
+float AStar::CalculateManhattanHeuristic(Node* currentNode, Node* goalNode)
+{
+	Vector2 diff = currentNode->position - goalNode->position;
+	return (float)(std::abs(diff.x) + std::abs(diff.y));
+}
+
+// 체비쇼프 거리 (대각선 이동 가능할 때 유리)
+float AStar::CalculateChebyshevHeuristic(Node* currentNode, Node* goalNode)
+{
+	Vector2 diff = currentNode->position - goalNode->position;
+	return (float)std::fmax(std::abs(diff.x), std::abs(diff.y));
+}
+
 
 void AStar::ResetList(Node* startNode, Node* goalNode)
 {
@@ -280,13 +304,12 @@ void AStar::ResetList(Node* startNode, Node* goalNode)
 		}
 		openList.clear();
 	}
-	if (!closedList.empty()) {
-		for (Node* node : closedList)
-		{
+	for (auto& row : map) {
+		for (Node*& node : row) {
 			SafeDelete(node);
 		}
-		closedList.clear();
 	}
+
 	openList.emplace_back(startNode);
 
 	isFindPath = false;

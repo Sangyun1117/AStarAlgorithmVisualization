@@ -503,11 +503,25 @@ void Engine::ScreenSettings()
 
 void Engine::DisableQuickEditMode()
 {
+	//빠른 편집모드 비활성화. (글자 드래그)
 	HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
 	DWORD mode;
 	GetConsoleMode(hInput, &mode);
 	mode &= ~ENABLE_QUICK_EDIT_MODE;
 	mode &= ~ENABLE_INSERT_MODE;
 	SetConsoleMode(hInput, mode);
+
+	//콘솔 우클릭 메뉴 제거
+	HWND console = GetConsoleWindow();
+	if (console) {
+		HMENU hMenu = GetSystemMenu(console, FALSE);
+		if (hMenu) {
+			// 편집 메뉴, 붙여넣기 메뉴 등 전체 제거
+			int count = GetMenuItemCount(hMenu);
+			for (int i = count - 1; i >= 0; --i) {
+				DeleteMenu(hMenu, i, MF_BYPOSITION);
+			}
+		}
+	}
 }
 

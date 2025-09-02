@@ -3,6 +3,7 @@
 #include <vector>
 #include <queue>
 #include "Actor/WordActor.h"
+#include "Node.h"
 
 // A* 길찾기 알고리즘을 처리하는 클래스.
 class Node;
@@ -20,12 +21,12 @@ class AStar
 	};
 
 public:
-	AStar();
+	AStar(int x, int y);
 	~AStar();
 
 	// 경로 탐색 함수.
 	bool FindPath(
-		std::vector<std::vector<WordActor*>>& grid
+		std::vector<std::vector<WordActor*>>& grid, int heuristicSelect
 	);
 
 	void ResetList(Node* startNode, Node* goalNode);
@@ -45,17 +46,26 @@ private:
 	bool HasVisited(int x, int y, float gCost);
 
 	// 현재 지점에서 목표 지점까지의 추정 비용 계산 함수.
-	float CalculateHeuristic(Node* currentNode, Node* goalNode);
+	float CalculateEuclidHeuristic(Node* currentNode, Node* goalNode);
+	float CalculateManhattanHeuristic(Node* currentNode, Node* goalNode);
+	float CalculateChebyshevHeuristic(Node* currentNode, Node* goalNode);
 
 	//void DisplayGrid(std::vector<std::vector<int>>& grid);
 
 
 private:
 	// 열린 리스트(방문할 노드의 목록).
+	//struct CompareNode {
+	//	bool operator()(Node* a, Node* b) const {
+	//		return a->fCost > b->fCost;
+	//	}
+	//};
+	//std::priority_queue<Node*, std::vector<Node*>, CompareNode> pq;
 	std::vector<Node*> openList;
 
 	// 닫힌 리스트(방문한 노드의 목록).
-	std::vector<Node*> closedList;
+	//std::vector<Node*> closedList;
+	std::vector<std::vector<Node*>> map;
 
 	// 시작 노드.
 	Node* startNode = nullptr;
@@ -63,14 +73,32 @@ private:
 	// 목표 노드.
 	Node* goalNode = nullptr;
 
+	int findCount = 0;
+
 	// 상하좌우, 대각선 방향 및 비용.
-	std::vector<Direction> directions =
+	std::vector<Direction> euclidDirections =
 	{
 		// 하상우좌 이동.
 		{ 0, 1, 1.0f }, { 0, -1, 1.0f }, { 1, 0, 1.0f }, { -1, 0, 1.0f },
 
 		// 대각선 이동.
 		{ 1, 1, 1.414f }, { 1, -1, 1.414f }, { -1, 1, 1.414f }, { -1, -1, 1.414f },
+	};
+	std::vector<Direction> manhattanDirections =
+	{
+		// 하상우좌 이동.
+		{ 0, 1, 1.0f }, { 0, -1, 1.0f }, { 1, 0, 1.0f }, { -1, 0, 1.0f },
+		// 대각선 이동.
+		//{ 1, 1, 1.414f }, { 1, -1, 1.414f }, { -1, 1, 1.414f }, { -1, -1, 1.414f },
+	};
+	std::vector<Direction> chebyshevdirections =
+	{
+		// 하상우좌 이동.
+		{ 0, 1, 1.0f }, { 0, -1, 1.0f }, { 1, 0, 1.0f }, { -1, 0, 1.0f },
+
+		// 대각선 이동.
+		{ 1, 1, 1}, { 1, -1,1}, { -1, 1, 1}, { -1, -1, 1},
+		//{ 1, 1, 1.414f }, { 1, -1, 1.414f }, { -1, 1, 1.414f }, { -1, -1, 1.414f },
 	};
 public:
 	std::queue<WordActor*> resultQueue;
