@@ -1,4 +1,4 @@
-//경로. 경로탐색
+//A* 알고리즘의 경로
 #pragma once
 #include "Actor/WordActor.h"
 #include "Settings/ObjectDefines.h"

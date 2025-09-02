@@ -1,3 +1,4 @@
+//토끼, 경로탐색 알고리즘의 시작점이다.
 #pragma once
 #include "Actor/WordActor.h"
 #include "Settings/ObjectDefines.h"

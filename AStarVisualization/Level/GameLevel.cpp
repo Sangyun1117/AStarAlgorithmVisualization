@@ -12,26 +12,27 @@
 #include <cstdlib> 
 GameLevel::GameLevel()
 {
+	//콘솔창 크기 정보를 가져와 맵 생성
 	wordActors = std::vector<std::vector<WordActor*>>(GAME_HEIGHT, std::vector<WordActor*>(GAME_WIDTH / WORD_WIDTH, nullptr));
 	pathMap = std::vector<std::vector<WordActor*>>(GAME_HEIGHT, std::vector<WordActor*>(GAME_WIDTH / WORD_WIDTH, nullptr));
 
 	aStar = new AStar(wordActors[0].size(), wordActors.size());
 
+	//토끼, 당근 추가
 	rabbit = new Rabbit({ 0, 5 });
 	wordActors[5][0] = rabbit;
-	//carrot = new Carrot({ 4, 6 });
-	//wordActors[6][2] = carrot;
+
 	CarrotRandomRespawn();
 
-	//버튼 기본 문자열
+	//오브젝트 버튼 기본 문자열
 	const wchar_t* startLine = L"🐰 RABBIT [Q]";
 
-	//버튼 중앙 좌표 계산
+	//오브젝트 버튼 중앙 좌표 계산
 	int textLength = static_cast<int>(wcslen(startLine));
 	int startX = 1;
 	int startY = Engine::Get().GetScreenHeight() - 1;
 
-	//버튼 좌표 저장
+	//오브젝트 버튼 좌표 저장
 	rabbitButtonLeftTopXY = { startX, startY };
 	rabbitButtonRightBottomXY = { startX + textLength, startY };
 	startX += textLength + 2;
@@ -44,15 +45,12 @@ GameLevel::GameLevel()
 	startButtonLeftTopXY = { startX, startY };
 	startButtonRightBottomXY = { startX + textLength, startY };
 
-	//텍스트 좌표 저장
-	//const wchar_t* tmp = L"Count: 500    ";
-	//textLength = static_cast<int>(wcslen(tmp));
-
 	const wchar_t* euclidText = L"Euclid[A]";
 	const wchar_t* manhattanText = L"Manhattan[S]";
 	const wchar_t* chebyshevText = L"Chebyshev[D]";
 	const wchar_t* findText = L"Count: 500";
 
+	//휴리스틱 함수 버튼 
 	startX = 1;
 	--startY;
 	textLength = static_cast<int>(wcslen(euclidText));
@@ -78,14 +76,14 @@ GameLevel::~GameLevel()
 {
 	for (auto& row : wordActors) {
 		for (auto& wordPtr : row) {
-			SafeDelete(wordPtr); // new WordActor() 해제
+			SafeDelete(wordPtr);
 		}
 		row.clear();
 	}
 	wordActors.clear();
 	for (auto& row : pathMap) {
 		for (auto& pathPtr : row) {
-			SafeDelete(pathPtr); // new WordActor() 해제
+			SafeDelete(pathPtr);
 		}
 		row.clear();
 	}
@@ -94,7 +92,6 @@ GameLevel::~GameLevel()
 	carrot = nullptr;
 	rabbit = nullptr;
 
-	//Todo: aStar 딜리트 확인
 	SafeDelete(aStar);
 }
 
@@ -107,27 +104,18 @@ void GameLevel::Tick(float deltaTime)
 {
 	super::Tick(deltaTime);
 
-	//마우스가 버튼 위에 있는지 확인
-	//isHoverRabbit = Input::Get().IsMouseOver(rabbitButtonLeftTopXY, rabbitButtonRightBottomXY);
-	//isHoverWall = Input::Get().IsMouseOver(wallButtonLeftTopXY, wallButtonRightBottomXY);
-	//isHoverCarrot = Input::Get().IsMouseOver(carrotButtonLeftTopXY, carrotButtonRightBottomXY);
-	//isHoverStart = Input::Get().IsMouseOver(startButtonLeftTopXY, startButtonRightBottomXY);
-
+	//탐색시간 갱신
 	if (isPathCheck || isPathPrint || isRun) {
 		findTime += deltaTime;
 	}
+	//경로 탐색
 	if (isPathCheck) {
-		//static float elapsed = 0.0f;   // 누적 시간 저장
-		//elapsed += deltaTime;
-
-		//if (elapsed >= 0.02f) {
-		//	elapsed = 0.0f;
 		bool check = aStar->FindPath(wordActors, heuristicSelect);
-		if (!check) {
+		if (!check) { //경로 없음
 			isPathCheck = false;
 			for (auto& row : pathMap) {
 				for (auto& pathPtr : row) {
-					SafeDelete(pathPtr); // new WordActor() 해제
+					SafeDelete(pathPtr); 
 				}
 			}
 		}
@@ -150,6 +138,7 @@ void GameLevel::Tick(float deltaTime)
 		return;
 	}
 
+	//경로 출력
 	if (isPathPrint) {
 
 		for (Node* node : aStar->path) {
@@ -161,12 +150,8 @@ void GameLevel::Tick(float deltaTime)
 		std::reverse(aStar->path.begin(), aStar->path.end()); //Run에서 앞에서부터 삭제하면 시간복잡도가 크기 때문에 미리 바꿔놈
 	}
 
+	//시작점에서 도착점까지 이동
 	if (isRun) {
-		//static float elapsed = 0.0f;   // 누적 시간 저장
-		//elapsed += deltaTime;
-
-		//if (elapsed >= 0.05f) {
-		//	elapsed = 0.0f;
 		if (!aStar->path.empty()) {
 			int pathX = aStar->path.back()->position.x;
 			int pathY = aStar->path.back()->position.y;
@@ -178,7 +163,7 @@ void GameLevel::Tick(float deltaTime)
 				CarrotRandomRespawn();
 				for (auto& row : pathMap) {
 					for (auto& pathPtr : row) {
-						SafeDelete(pathPtr); // new WordActor() 해제
+						SafeDelete(pathPtr);
 					}
 				}
 
@@ -188,10 +173,9 @@ void GameLevel::Tick(float deltaTime)
 		else {
 			isRun = false;
 		}
-		//}
 	}
 
-	//버튼 선택
+	//오브젝트 버튼 선택
 	if (Input::Get().GetMouseLeftDown() &&
 		Input::Get().IsMouseOver(rabbitButtonLeftTopXY, rabbitButtonRightBottomXY))
 	{
@@ -215,7 +199,7 @@ void GameLevel::Tick(float deltaTime)
 		isPathCheck = true;
 	}
 
-	//버튼 선택
+	//휴리스틱 버튼 선택
 	if (Input::Get().GetMouseLeftDown() &&
 		Input::Get().IsMouseOver(euclidButtonLeftTopXY, euclidButtonRightBottomXY))
 	{
@@ -233,7 +217,7 @@ void GameLevel::Tick(float deltaTime)
 		heuristicSelect = SELECT_CHEBYSHEV;
 	}
 
-	//마우스 좌클릭
+	//게임 맵 마우스 좌클릭 (토끼, 당근)
 	if (Input::Get().GetMouseLeftDown()) {
 		Vector2 nowMousePosition = Input::Get().GetMousePosition();
 		int xValue = nowMousePosition.x / WORD_WIDTH;
@@ -257,16 +241,10 @@ void GameLevel::Tick(float deltaTime)
 					wordActors[yValue][xValue] = rabbit;
 				}
 			}
-			//else if (nowMouseLevel == SELECT_WALL) {
-			//	if (!wordActors[yValue][xValue]) {
-			//		Wall* w = new Wall({ xValue * WORD_WIDTH, yValue });
-			//		wordActors[yValue][xValue] = w;
-			//	}
-			//}
 		}
 	}
 
-	// 마우스 좌클릭 또는 드래그
+	//게임 맵 마우스 좌클릭 드래그 (벽 설치)
 	if (Input::Get().GetMouseLeft()) {  // 눌린 상태 감지
 		Vector2 nowMousePosition = Input::Get().GetMousePosition();
 		int xValue = nowMousePosition.x / WORD_WIDTH;
@@ -283,7 +261,7 @@ void GameLevel::Tick(float deltaTime)
 			}
 		}
 	}
-	// 마우스 우클릭 또는 드래그
+	//게임 맵 마우스 우클릭 드래그(벽 삭제)
 	if (Input::Get().GetMouseRight()) {  // 눌린 상태 감지
 		Vector2 nowMousePosition = Input::Get().GetMousePosition();
 		int xValue = nowMousePosition.x / WORD_WIDTH;
@@ -301,6 +279,7 @@ void GameLevel::Tick(float deltaTime)
 		}
 	}
 
+	//키보드 입력
 	if (Input::Get().GetKeyDown('Q')) {
 		nowMouseLevel = SELECT_RABBIT;
 	}
@@ -324,7 +303,7 @@ void GameLevel::Tick(float deltaTime)
 		heuristicSelect = SELECT_CHEBYSHEV;
 	}
 
-	//esc 누르면 메뉴레벨로 이동
+	//esc 누르면 홈레벨로 이동
 	if (Input::Get().GetKeyDown(VK_ESCAPE))
 	{
 		static_cast<Game&>(Engine::Get()).ChangeLevel(LEVEL_NUM_HOME);
@@ -450,6 +429,7 @@ void GameLevel::SettingBackground()
 	buffer.Attributes = gameColor;
 }
 
+//초기화 후 다시 경로 탐색
 void GameLevel::RestartPath()
 {
 	findCount = 0;
@@ -459,6 +439,7 @@ void GameLevel::RestartPath()
 	aStar->ResetList(startNode, goalNode);
 }
 
+//랜덤한 위치에 당근 생성
 void GameLevel::CarrotRandomRespawn()
 {
 	if (carrot != nullptr)

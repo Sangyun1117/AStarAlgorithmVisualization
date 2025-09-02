@@ -1,12 +1,10 @@
+//A*알고리즘에서 좌표 다루기 위한 클래스.
 #pragma once
-
 #include <iostream>
 #include "Actor/WordActor.h"
 #include "Math/Vector2.h"
-// 좌표 다루기 위한 구조체.
-// c++ 원칙상 struct/class 차이가 없음.
-// 접근 한정자(제한자/visibility) struct public/class private 기본.
-// 코딩 표준(struct - 데이터 전용 / class 객체).
+
+
 class Node{
 public:
 	Node(int x, int y, Node* parentNode = nullptr);

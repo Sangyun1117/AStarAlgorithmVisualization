@@ -1,11 +1,10 @@
+// A* 길찾기 알고리즘을 처리하는 클래스.
 #pragma once
-
 #include <vector>
 #include <queue>
 #include "Actor/WordActor.h"
 #include "Node.h"
 
-// A* 길찾기 알고리즘을 처리하는 클래스.
 class Node;
 class AStar
 {
@@ -50,21 +49,11 @@ private:
 	float CalculateManhattanHeuristic(Node* currentNode, Node* goalNode);
 	float CalculateChebyshevHeuristic(Node* currentNode, Node* goalNode);
 
-	//void DisplayGrid(std::vector<std::vector<int>>& grid);
-
-
 private:
 	// 열린 리스트(방문할 노드의 목록).
-	//struct CompareNode {
-	//	bool operator()(Node* a, Node* b) const {
-	//		return a->fCost > b->fCost;
-	//	}
-	//};
-	//std::priority_queue<Node*, std::vector<Node*>, CompareNode> pq;
 	std::vector<Node*> openList;
 
 	// 닫힌 리스트(방문한 노드의 목록).
-	//std::vector<Node*> closedList;
 	std::vector<std::vector<Node*>> map;
 
 	// 시작 노드.

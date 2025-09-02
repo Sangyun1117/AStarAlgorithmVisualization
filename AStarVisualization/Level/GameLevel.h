@@ -1,7 +1,12 @@
-//게임레벨은 게임이 실제 진행되는 핵심적인 레벨입니다.
-//방향키로 플레이어를 이동시키고 마우스 왼쪽버튼으로 공격,건축 등이 가능합니다.
-//숫자키 0~9를 누르면 아이템을 변경합니다.
-//esc를 누르면 메뉴레벨로 이동합니다.
+// 게임레벨은 게임이 실제 진행되는 핵심적인 레벨입니다.
+// 맵 하단의 버튼을 통해 설치할 오브젝트를 고르거나 사용할 휴리스틱 함수를 고를 수 있습니다.
+// 맵에 마우스 좌클릭 하면 선택된 오브젝트가 해당 위치에 설치됩니다.
+// 토끼와 당근은 맵에 하나만 존재하면 벽은 여러개 존재가능합니다.
+// 벽은 마우스 좌클릭 드래그해서 설치 가능하며, 우클릭 드래그로 삭제도 가능합니다.
+// Start 버튼을 누르면 정해진 휴리스틱 함수를 이용해 토끼가 장애물을 피해 당근을 먹습니다.
+// 토끼가 당근을 먹는데 성공하면 랜덤한 위치에 새로운 당근이 생깁니다.
+// 화면 하단 UI의 Count는 탐색한 노드 수, Time은 탐색 시간입니다.
+// esc를 누르면 홈레벨로 이동합니다.
 #pragma once
 #include "Level/Level.h"
 #include "Math/Vector2.h"
@@ -9,9 +14,9 @@
 #include "Actor/Carrot.h"
 #include "Actor/Rabbit.h"
 #include "Math/AStar.h"
-//#include "Actor/Player.h"
 #include <vector>
 #include <string>
+
 class GameLevel : public Level {
 	RTTI_DECLARATIONS(GameLevel, Level)
 public:
@@ -34,18 +39,12 @@ private:
 	int nowMouseLevel = SELECT_CARROT;
 	std::vector<std::vector<WordActor*>> wordActors;
 	std::vector<std::vector<WordActor*>> pathMap;
-	//std::vector<Node*> path;
+
 	bool isPathCheck = false;
 	bool isPathPrint = false;
 	bool isRun = false;
 	bool isPathDelete = false;
 
-
-	//ui버튼
-	//bool isHoverRabbit = false;
-	//bool isHoverWall = false;
-	//bool isHoverCarrot = false;
-	//bool isHoverStart = false;
 	Color selectedTextColor = Color::Green;
 	Color selectedBagroundColor = Color::Blue;
 	//아이템 선택 안됐을 때 색상
@@ -70,5 +69,6 @@ private:
 	Vector2 manhattanButtonRightBottomXY;
 	Vector2 chebyshevButtonLeftTopXY;
 	Vector2 chebyshevButtonRightBottomXY;
+	//선택된 휴리스틱 함수
 	int heuristicSelect = SELECT_EUCLID;
 };

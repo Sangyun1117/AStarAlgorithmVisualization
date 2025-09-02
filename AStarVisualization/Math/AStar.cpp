@@ -42,7 +42,6 @@ AStar::~AStar()
 
 bool AStar::FindPath(std::vector<std::vector<WordActor*>>& grid, int heuristicSelect)
 {
-	// 시작 노드 / 목표 노드 저장.
 
 	// 방문.
 	if (openList.empty()) {
