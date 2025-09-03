@@ -49,7 +49,7 @@
 
 ## 🛠️ 설치 방법
 OS: Windows 콘솔/터미널 환경 필요<br><br>
-아래 링크에서 설치 후 ClientGame 폴더의 ClientGame.exe 관리자 권한으로 실행<br>
+아래 링크에서 설치 후 Game 폴더의 Game.exe 관리자 권한으로 실행<br>
 https://github.com/Sangyun1117/AStarAlgorithmVisualization/releases/download/v1.0.0/AStarAlgorithmVisualization.zip <br>
 
 ## 📌 동작 방법
