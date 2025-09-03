@@ -7,11 +7,11 @@
 
 ## 🖼️ 데모 / 스크린샷
 
-### ⛏️ 유클리드 거리<br>
+### 1️⃣ 유클리드 거리<br>
 ![Image](https://github.com/user-attachments/assets/c511b95d-11b6-4530-9094-a29ad18921da)<br>
-### ⚔️ 맨해튼 거리<br>
+### 2️⃣ 맨해튼 거리<br>
 ![Image](https://github.com/user-attachments/assets/1c6eaa7a-c090-4a80-9ee1-023f8154ae2f)<br>
-### ⚔️ 체비쇼프 거리<br>
+### 3️⃣ 체비쇼프 거리<br>
 ![Image](https://github.com/user-attachments/assets/a9fa4cd3-d018-4546-942a-c97243dac4ed)
 
 ---
