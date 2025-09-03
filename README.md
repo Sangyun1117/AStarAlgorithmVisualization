@@ -6,13 +6,13 @@
 ---
 
 ## 🖼️ 데모 / 스크린샷
+
 ### ⛏️ 유클리드 거리<br>
-![Image](https://github.com/user-attachments/assets/bba67935-1797-445e-9dac-11c442a59111)
-![Image](https://github.com/user-attachments/assets/481b02e6-2021-482f-9bad-e2d71686b9a6)<br>
+![Image](https://github.com/user-attachments/assets/c511b95d-11b6-4530-9094-a29ad18921da)<br>
 ### ⚔️ 맨해튼 거리<br>
-![Image](https://github.com/user-attachments/assets/d2ce1554-e098-4c45-9e3d-970feab75a50)
+![Image](https://github.com/user-attachments/assets/1c6eaa7a-c090-4a80-9ee1-023f8154ae2f)<br>
 ### ⚔️ 체비쇼프 거리<br>
-![Image](https://github.com/user-attachments/assets/d2ce1554-e098-4c45-9e3d-970feab75a50)
+![Image](https://github.com/user-attachments/assets/a9fa4cd3-d018-4546-942a-c97243dac4ed)
 
 ---
 
