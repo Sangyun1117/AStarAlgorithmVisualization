@@ -17,7 +17,9 @@
 ---
 
 ## A* 알고리즘
+![Image](https://github.com/user-attachments/assets/ce68299c-9534-4856-b3a9-1b96c7d01a58)
 
+---
 
 ## 🤓 휴리스틱 함수 분석
 
